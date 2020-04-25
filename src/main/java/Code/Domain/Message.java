@@ -1,7 +1,6 @@
 package Code.Domain;
 
 import javax.persistence.*;
-import java.net.InetAddress;
 import java.sql.Date;
 
 @Entity
