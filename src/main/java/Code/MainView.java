@@ -32,7 +32,7 @@ public class MainView extends VerticalLayout {
     private void showMessages(){
         messagesGrid.setItems(messageRepository.findAll());
         messagesGrid.setColumns("userName", "email", "homepage", "text", "date");
-        messagesGrid.setPageSize(25);
+        //messagesGrid.setPageSize(25);
     }
 
 

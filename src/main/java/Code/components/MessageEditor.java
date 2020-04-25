@@ -33,8 +33,6 @@ public class MessageEditor extends VerticalLayout implements KeyNotifier {
     private TextField homepage = new TextField("Enter Homepage");
     private TextArea text = new TextArea("Enter your message");
 
-    private ReCaptcha captcha = new ReCaptcha("1", "1");
-
     private Button save = new Button("Send", VaadinIcon.CHECK.create());
     private HorizontalLayout actions = new HorizontalLayout(save);
 
@@ -43,6 +41,8 @@ public class MessageEditor extends VerticalLayout implements KeyNotifier {
     private Binder<Message> binder = new Binder<>(Message.class);
 
     private ChangeHandler changeHandler;
+
+    private Captcha captcha = new Captcha();
 
     public void setChangeHandler(ChangeHandler changeHandler) {
         this.changeHandler = changeHandler;
@@ -58,13 +58,11 @@ public class MessageEditor extends VerticalLayout implements KeyNotifier {
         buttonSettings();
 
         input.add(userName, email, homepage);
-        actions.add(captcha);
-        add(input, text, actions);
+
+        add(input, new HorizontalLayout(text, captcha), actions);
+
 
         binder.bindInstanceFields(this);
-        //binder.bind(userName,Message::getUserName, Message::setUserName);
-        //binder.bind(email, Message::getEmail, Message::setEmail);
-        //binder.bind(text, Message::getText, Message::setText);
 
         setSpacing(true);
 
@@ -76,21 +74,21 @@ public class MessageEditor extends VerticalLayout implements KeyNotifier {
     }
 
     public void save() {
-        //binder.validate();
-        message = new Message();
-        binder.setBean(message);
+        if((!userName.isInvalid()) && (captcha.isValid())) {
+            message = new Message();
             message.setDate(new Date(System.currentTimeMillis()));
             message.setIp(webBrowser.getAddress());
             message.setBrowserVesrion(webBrowser.getBrowserApplication());
-            //message.setUserName(userName.getValue());
-            //message.setEmail(email.getValue());
-            //message.setText(text.getValue());
+            message.setUserName(userName.getValue());
+            message.setEmail(email.getValue());
+            message.setText(text.getValue());
             message.setHomepage(homepage.getValue());
 
             messageRepository.save(message);
             userName.focus();
             changeHandler.onChange();
             refresh();
+        }
     }
 
     private void refresh(){
@@ -98,18 +96,24 @@ public class MessageEditor extends VerticalLayout implements KeyNotifier {
         email.setValue("");
         homepage.setValue("");
         text.setValue("");
+        captcha.refresh();
+
     }
 
     private void buttonSettings(){
         userName.setRequired(true);
         userName.setAutofocus(true);
+        userName.setErrorMessage("Please Enter your name");
+
 
         email.setRequired(true);
         email.setPattern("/.+@.+\\..+/i");
+        email.setErrorMessage("Please enter your email");
 
         text.setRequired(true);
         text.setPlaceholder("Write here");
         text.getStyle().set("maxlength", "1024");
+        text.setErrorMessage("Please write your message here");
 
     }
 }
