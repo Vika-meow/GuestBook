@@ -112,7 +112,6 @@ public class MessageEditor extends VerticalLayout implements KeyNotifier {
 
         messageRepository.save(message);
         userName.focus();
-        //changeHandler.onChange();
         refresh();
     }
 

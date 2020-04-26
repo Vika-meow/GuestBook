@@ -56,7 +56,6 @@ public class Captcha extends VerticalLayout {
         Image image = new Image(resource, "");
 
         currentCode = currentFile.getName().substring(0, 5);
-        //captchaCheck.setPattern(currentCode);
         return image;
     }
 

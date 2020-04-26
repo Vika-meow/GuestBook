@@ -5,24 +5,20 @@ import java.sql.Date;
 
 @Entity
 public class Message {
-    //пока оставлю так, если что сделаю составной ключ, но какой - хз
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
 
     private String userName;
     private String email;
-    //возможно стоит сделать URL
     private String homepage;
+
     @Column(length = 1024)
     private String text;
 
     private Date date;
-    //возможно лучше стрингом
-    //private InetAddress ip;
     private String ip;
     private String browserVesrion;
-    //captcha????
 
     public Message() {
     }
